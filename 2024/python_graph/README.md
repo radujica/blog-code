@@ -2,7 +2,7 @@
 
   conda create -n python_graph python
   conda activate python_graph
-  pip install networkx
+  pip install networkx matplotlib
 
 
 # Run
