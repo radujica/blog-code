@@ -2,12 +2,8 @@ def read_data(*args, **kwargs) -> None:
 	return 1
 
 
-def process_inner(data: int, other_arg: int) -> None:
-	return data + other_arg
-
-
 def process(data: int) -> int:
-	return process_inner(data, 1)
+	return data + 1
 
 
 def write_data(data: int) -> None:
