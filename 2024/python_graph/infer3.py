@@ -1,0 +1,28 @@
+import ast
+import inspect
+
+def infer_graph(func):
+	entire_ast = ast.parse(inspect.getsource(func))
+	entire_pipeline_func = entire_ast.body[0]
+	edges = list()
+	nodes = set()
+	for elem in entire_pipeline_func.body:
+		if isinstance(elem, ast.Assign) and isinstance(elem.value, ast.Call):
+			# e.g. given: processed_data = process(data)
+			output_ = elem.targets[0].id  # processed_data
+			nodes.add(output_)
+			f = elem.value.func.id  # process
+			input_ = elem.value.args[0].id if elem.value.args and elem.value.args[0].id in nodes else None  # data
+
+			edges.append((
+				input_, f, output_
+			))
+		elif isinstance(elem, ast.Expr):
+			f = elem.value.func.id
+			input_ = elem.value.args[0].id if elem.value.args and elem.value.args[0].id in nodes else None  # data
+			if input_:
+				edges.append((
+					input_, f, None
+				))
+
+	return edges
