@@ -1,0 +1,3 @@
+table_name,timestamp
+purchases,2024-01-01T00:00:00
+num_purchases_per_day,2024-01-01T00:02:00
