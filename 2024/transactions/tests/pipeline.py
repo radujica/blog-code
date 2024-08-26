@@ -36,7 +36,7 @@ def log():
     inner_log()
 
 
-@transaction()
+@transaction
 def run_two_things(name: str):
     write(name)
     log()

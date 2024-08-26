@@ -38,11 +38,11 @@ def test_first_succeeded_second_fails_are_all_reverted(inner_log_mock, revert_wr
 
 
 def test_multiple_transaction_are_not_allowed():
-    @transaction()
+    @transaction
     def f1():
         pass
 
-    @transaction()
+    @transaction
     def f2():
         f1()
 
@@ -53,7 +53,7 @@ def test_multiple_transaction_are_not_allowed():
 
 @mock.patch("decorator.warn_when_missing_rollback_decorators")
 def test_is_warning_when_no_rollback_registered(warn_mock):
-    @transaction()
+    @transaction
     def f1():
         pass
 

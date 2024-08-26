@@ -36,8 +36,7 @@ def log():
     print("logged!")
 
 
-# TODO: remove need for brackets here
-@transaction()
+@transaction
 def run_two_things(name: str):
     write(name)
     log()
