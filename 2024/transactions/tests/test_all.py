@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from unittest import mock
 
 import pytest
@@ -63,3 +64,33 @@ def test_is_warning_when_no_rollback_registered(warn_mock):
 
 def test_rollback_decorated_function_is_still_runnable_on_its_own():
     write("name")
+
+
+@pytest.mark.skip("not meant to work :/")
+@mock.patch("tests.pipeline.inner_log")
+def test_queue_is_isolated_per_thread(inner_log_mock):
+    num_expected_executions = 20
+
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        for i in range(num_expected_executions):
+            executor.submit(run_two_things, f"name{i}")
+
+    assert inner_log_mock.call_count == num_expected_executions
+
+
+# needs to be pickle-able for ProcessPoolExecutor, so at the top level in the file/module
+@transaction
+def f3():
+    return 1
+
+
+# for process cannot use mock as the processes run on different stacks
+def test_queue_is_isolated_per_process():
+    num_expected_executions = 20
+
+    futures = list()
+    with ProcessPoolExecutor(max_workers=10) as executor:
+        for i in range(num_expected_executions):
+            futures.append(executor.submit(f3))
+
+    assert sum((f.result() for f in futures)) == num_expected_executions

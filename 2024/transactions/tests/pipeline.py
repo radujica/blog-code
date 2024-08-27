@@ -1,9 +1,9 @@
 from decorator import rollback, transaction
 
-# the inner funcs are purely to make mocking easier for the tests
+# the inner funcs are purely to make mocking easier in the tests
 
 def inner_revert_write(name: str):
-    print(f"reverting write of {name}!")
+    print(f"reverting write of {name}")
 
 
 def revert_write(name: str):
@@ -11,7 +11,7 @@ def revert_write(name: str):
 
 
 def inner_revert_log():
-    print("reverting log!")
+    print("reverting log")
 
 
 def revert_log():
@@ -19,7 +19,7 @@ def revert_log():
 
 
 def inner_write(name: str):
-    print(name)
+    print(f"writing {name}")
 
 
 @rollback(rollback_func=revert_write)
@@ -28,7 +28,7 @@ def write(name: str):
 
 
 def inner_log():
-    print("logged!")
+    print("logging")
 
 
 @rollback(rollback_func=revert_log)
