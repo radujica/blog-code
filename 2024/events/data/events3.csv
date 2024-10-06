@@ -1,0 +1,5 @@
+table_name,timestamp,correlation_id
+purchases,2024-01-01T00:00:00,68cdb6c2-fc90-4a4f-b3d0-e2a06f9b9a94
+num_purchases_per_day,2024-01-01T00:02:00,68cdb6c2-fc90-4a4f-b3d0-e2a06f9b9a94
+purchases,2024-02-01T00:00:00,40eab005-6d5b-4400-b5c2-62fd7e02c858
+exchange_rate,2024-01-07T00:00:00,4d7bf706-30a3-4171-a8cd-63180cccec42
