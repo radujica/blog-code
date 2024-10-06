@@ -7,4 +7,4 @@
 
 # Run
 
-    python run.py
+    python runX.py
