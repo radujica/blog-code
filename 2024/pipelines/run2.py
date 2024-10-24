@@ -1,23 +1,11 @@
-# tl;dr how to structure the code ~ airflow + dagster but without any dependencies
-from typing import Any, Optional
+import inspect
 
-from abc import abstractmethod
-
-import abc
+import ast
 
 
-# this removes the need of a transformation and just uses functions
+# this removes the need of a transformation and just uses functions and passing output from one to another based on static args/kwargs
 
-class GraphElement:
-    ...
-
-
-class Node(GraphElement):
-    ...
-
-
-# TODO: will this work dynamically?
-class Edge(GraphElement):
+class Operation:
     def __init__(self):
         self.downstream = list()
 
@@ -26,24 +14,32 @@ class Edge(GraphElement):
         return self
 
 
-class DAG(Edge):
+class DAG:
     def run(self):
         output = None
         for function in self.downstream:
-            output = function(output)
+            entire_ast = ast.parse(inspect.getsource(function))
+            func_args = entire_ast.body[0].args.args
+            if func_args:
+                output = function(output)
+            else:
+                output = function()
 
         return output
 
 
-def fetch_data_api(previous_output):
+def fetch_data_api():
     print("FETCH DONE")
+    return [1, 2, 3]
 
 
-def filter_fields(previous_output):
+def filter_fields(inp):
     print("FILTER DONE")
+    return [e for e in inp if e > 1]
 
 
-def dump_to_file(previous_output):
+def dump_to_file(inp):
+    print(inp)
     print("DUMP DONE")
 
 
@@ -52,4 +48,8 @@ print(dag)
 print(dag.downstream)
 print(dag.run())
 
-# TODO: need a dir to fetch all dags from via a function
+# TODO: extend kwargs etc. in run
+# TODO: can we handle args & kwargs too within run
+# TODO: implement load modules to find dag objects in globals()
+# TODO: implement rrshift etc. for [a, b] >> c; how to pass output between them?
+# TODO: static args/kwargs?
